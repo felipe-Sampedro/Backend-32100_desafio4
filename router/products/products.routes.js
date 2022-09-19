@@ -1,11 +1,7 @@
 const express = require('express')
 const fs =require('fs')
-
 const { products } = require('../../data/data');
-
 const router = express.Router()
-
-
 
 router.get('/',(req,res,next)=>{
     console.log(req.query);
@@ -13,6 +9,7 @@ router.get('/',(req,res,next)=>{
 })
 
 router.get('/:id',(req,res,next)=>{
+    const {id} = req.params
     console.log(req.params);
     const idProduct = products.findIndex((p)=>p.id=== +(id))
     if (idProduct<0){
@@ -20,9 +17,7 @@ router.get('/:id',(req,res,next)=>{
     }
     const product = products.find((p)=>p.id=== +(req.params.id))
     res.json(product)
-
 })
-
 
 router.post('/',(req,res,next)=>{
     console.log(req.body);
@@ -33,9 +28,9 @@ router.post('/',(req,res,next)=>{
         thumbnail,
         id:products.length +1,
     }
-
+    console.log(newProduct);
     products.push(newProduct)
-    fs.writeFileSync('./data.json',JSON.stringify(products,null,2))
+    // fs.writeFileSync('./data.json',JSON.stringify(products,null,2))
     res.json(newProduct)
 })
 
@@ -51,11 +46,12 @@ router.put('/:id',(req,res,next)=>{
         ...products[indProduct],
         title,
         price,
-        thumbnail
+        thumbnail,
     };
     products[indProduct]=actProduct;
-    fs.writeFileSync('./data.json',JSON.stringify(products,null,2))
-    res.json(deletedProduct)
+    console.log(products[indProduct]);
+    // fs.writeFileSync('./data.json',JSON.stringify(products,null,2))
+    res.json(actProduct)
 })
 
 
